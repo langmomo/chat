@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+<ul id='chat-items'>
+{% for chat in object.chatmessage_set.all %}
+
+<li>{{ chat.message }} via {{ chat.user }}</li>
+
+{% endfor %}
+</ul>
+
+<form id='formData' method='POST'> {% csrf_token %}
+    <input type="hidden" id="myUsername" value="{{ user.username}}" />
+{{form.as_p }}
+<input type='submit' class='btn btn-primary'/>
+</form>
+
+<textarea rows="10" cols="35" id="inputdata"></textarea>
+<button id="" onclick="postFile()">Python</button>
+
+<button id="rundata" onclick="rundata()">RUN</button>
+
+<iframe id="iframe1">{{items}}</iframe>
+<label>Label {{new}}</label>
+<input type="text" value="{{items}}"/>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+// websocket scripts
+
+
+var loc = window.location
+var formData = $("#formData")
+var inputData = $("#id_message")
+var inputArea = $("#inputdata")
+var chatHolder = $("#chat-items")
+var me = $("#myUsername").val()
+var file = true
+var wsStart= 'ws://'
+if(loc.protocol == 'https:'){
+    wsStart = 'wss://'
+}
+var endpoint = wsStart + loc.host +loc.pathname
+var socket= new WebSocket(endpoint)
+
+socket.onmessage = function(e){
+    console.log("message",e)
+
+    var chatMsgData = JSON.parse(e.data)
+    console.log(chatMsgData.type)
+    if(chatMsgData.type == 'chat'){
+        chatHolder.append("<li>" + chatMsgData.message + " via " + chatMsgData.username + "</li>")
+    }else{
+        document.getElementById('inputdata').value = chatMsgData.message
+    }
+
+}
+socket.onopen = function(e){
+    console.log("open",e)
+    formData.submit(function(event){
+        file = false
+        event.preventDefault()
+        var msgText = inputData.val()
+        chatHolder.append("<li>" + msgText + " via " + me + "</li>")
+        var finalData = {
+            'message': msgText,
+            'type': 'chat'
+        }
+        socket.send(JSON.stringify(finalData))
+
+        formData[0].reset()
+    })
+
+    inputArea.bind('input propertychange', function() {
+        event.preventDefault()
+        chatHolder.append("<li>" + document.getElementById('inputdata').value + "</li>")
+        var finalData = {
+            'message': document.getElementById('inputdata').value,
+            'type': 'file'
+        }
+        socket.send(JSON.stringify(finalData))
+    })
+}
+socket.onerror = function(e){
+    console.log("error",e)
+}
+socket.onclose = function(e){
+    console.log("close",e)
+}
+function rundata(){
+    //获取输入框内的数据
+    var text = document.getElementById('inputdata').value
+    // 先清空iframe
+    var iframe = document.getElementById("iframe1").contentWindow.document.body.innerText = ""
+    //将输入框内的数据传给iframe
+    iframe = document.getElementById('iframe1').contentDocument.write(text)
+}
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function postFile(){
+    var post_data = {
+      "items": document.getElementById('inputdata').value,
+    };
+    var url = loc.pathname.split("/")[2] + "/";
+   console.log("ajax:" + url)
+   $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        }
+    }
+    });
+    $.ajax({
+        url: "",
+        type: "POST",
+        data: post_data,
+        success: function (data) {
+            var iframe = document.getElementById("iframe1").contentWindow.document.body.innerText = ""
+            //将输入框内的数据传给iframe
+            iframe = document.getElementById('iframe1').contentDocument.write(data)
+        }
+    });
+}
+</script>
+{% endblock %}
