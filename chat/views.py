@@ -36,11 +36,7 @@ def SignupView(request):
         "Room name: " + request.user.username + "\r\n" + \
         "Password: "+ password + "\r\n" + \
         "https://chatroom-2018.herokuapp.com/messages/"+ username + "/"
-<<<<<<< HEAD
         send_mail('Join ChatRoom', msg , '2018.chatroom@gmail.com', email.split(","))
-=======
-        send_mail('Join ChatRoom', msg , 'lmomo999.147@gmail.com', email.split(","))
->>>>>>> 95227b387ed2f1f514c858a7ccca9213b94a5cd0
         return redirect('/messages/'+username + "/")
     content = {
         'state': state,
