@@ -3,13 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <style>
+            * {
+                box-sizing: border-box;
+            }
+            
+            input, textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                resize: vertical;
+            }
+            
+            label {
+                padding: 12px 12px 12px 0;
+                display: inline-block;
+            }
+            
+            input {
+                padding: 12px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                float: right;
+            }
+            
+            .container {
+                border-radius: 5px;
+                background-color: #f2f2f2;
+                padding: 20px;
+            }
+            
+            .col-25 {
+                float: left;
+                width: 25%;
+                margin-top: 6px;
+            }
+            
+            .col-75 {
+                float: left;
+                width: 75%;
+                margin-top: 6px;
+            }
+            
+            /* Clear floats after the columns */
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            
+            /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+            @media screen and (max-width: 600px) {
+                .col-25, .col-75, input {
+                    width: 100%;
+                    margin-top: 0;
+                }
+            }
+        </style>
 </head>
 <body>
+<!-- <div class="text-center p-3 m-3" style= "height:100vh;">
+    <h1>ChatRoom Sign Up & Notify Friends</h1>
     <form id="signForm" method="POST" action="">{% csrf_token %}
-        <input id="username" name="username" type="text" placeholder="RoomName">
-        <input id="password" name="password" type="password" placeholder="SignInPassword">
-        <input id="email" name="email" type="text" placeholder="addEmail">
-        <button type="submit" id="go">Submit</button>
+        <div class="row d-flex justify-content-center m-3 mt-4">
+            <label>Room Name: </label>
+            <input id="username" name="username" type="text" placeholder="RoomName" style="cursor: pointer; display: block;border-radius: 7px; margin-left: 7px">
+        </div>
+        <div class="row d-flex justify-content-center m-3">
+            <label>SignIn Password:</label>
+            <input id="password" name="password" type="password" placeholder="SignInPassword" style="cursor: pointer; display: block;border-radius: 7px; margin-left: 7px">
+        </div>
+        <div class="row d-flex justify-content-center m-3">
+            <label>Email Address:</label>
+            <input id="email" name="email" type="text" placeholder="Use ',' to seperate" style="cursor: pointer; display: block;border-radius: 7px; margin-left: 7px">  
+        </div>
+        <button type="submit" id="go" class="btn submit-button mb-2 py-2 mx-auto" style="display: block; cursor: pointer; color: black; background-color: lightblue; border-radius: 7px;" >Submit</button>
     </form>
+</div> -->
+<h2 class="m-4">Register/Enter a Room</h2>
+<p class = "instructions m-4">Please create a chat room by entering room name (different from channel name), channel password to invite friends to join your chat. 
+    If you already have an existing room, please enter room name to start your chat.
+</p>
+
+<div class="container">
+  <form id="signForm" method="POST" action="">{% csrf_token %}
+    <div class="row">
+      <div class="col-25">
+        <label for="rname">Room Name (Required)</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="username" name="username" placeholder="Room name">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="password">Password</label>
+      </div>
+      <div class="col-75">
+        <input type="password" id="password" name="password" placeholder="Your channel password">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="email">Email Address:</label>
+      </div>
+      <div class="col-75">
+        <input id="email" name="email" placeholder="Please use ',' to seperate different email addresses" style="height:200px"></input>
+      </div>
+    </div>
+    <div class="row">
+        <button type="submit" id="go" class="btn submit-button m-2 py-2 mx-auto" style="display: block; cursor: pointer; color: black; background-color: lightblue; border-radius: 7px;" >Submit</button>
+    </div>
+  </form>
+</div>
 </body>
 </html>

@@ -13,7 +13,6 @@ SECRET_KEY = 'em-9$ln6^a0z!s2pbo=mu*l$cgnqgsyd_z21f-%2d(_h7*wu^0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
 ALLOWED_HOSTS = ['*']
 
 
@@ -150,5 +149,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = '2018.chatroom@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
 EMAIL_USE_TLS = True
+LOGIN_REDIRECT_URL = '/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

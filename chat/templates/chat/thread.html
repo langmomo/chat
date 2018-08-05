@@ -4,9 +4,9 @@
 <!--<h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>-->
 
 <div class="container-fluid" style= height:100vh;">
-    <label>Channel: {{ user.username}}</label>
+    <h3>Channel: {{ user.username}}</h3>
     <div class="row h-100">
-        <div class="col-3 sidebar p-3 text-center">
+        <div class="col-3 sidebar p-3">
 
             <input id="nickName" name="nickName" placeholder="your nickname" style="cursor: pointer; display: block;border-radius: 7px"/>
             <form id='formData' method='POST'> {% csrf_token %}
@@ -26,16 +26,16 @@
 
         </div>
         <div class="col-6 text-center text-white p-3">
-            <textarea rows="18" cols="45" class="text-white" id="inputdata" style="background-color: rgba(0,0,0,0.5); border: 3px solid #d2b48c; border-radius: 7px;"></textarea></br>
-            <button class="btn python-button mb-2 py-2 mx-auto"
-                style="display: block; cursor: pointer; color: black; background-color: lightblue; border-radius: 7px;"
+            <textarea rows="18" width="330" cols="45" class="text-white" height="100%" id="inputdata" style="background-color: black; color:white; border: 3px solid #d2b48c; border-radius: 7px;"></textarea></br>
+            <div class="row" style="margin:5px">
+                <button class="btn python-button mb-1 py-3 mx-auto" style="padding：3px"
                 onclick="postFile()">Run Python</button>
-            <button class="btn run-button mb-2 py-2 mx-auto"
-                style="display: block; cursor: pointer; color: black; background-color: lightblue; border-radius: 7px;"
-                id="rundata" onclick="rundata()">Run HTML</button>
+                <button class="btn run-button mb-1 py-3 mx-auto" style="padding：3px"
+                    id="rundata" onclick="rundata()">Run HTML</button>
+            </div>
         </div>
         <div class="col-3 sidebar p-3 text-center">
-            <iframe id="iframe1" class="text-white" width="300" height="425" style="background-color: lightgray; border: 3px solid #d2b48c; border-radius: 7px;">
+            <iframe id="iframe1" class="text-white" width="300" height="100%" style="background-color: lightgray; border: 3px solid #d2b48c; border-radius: 7px;">
                 {{items}}</iframe>
         </div>
     </div>
