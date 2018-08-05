@@ -11,7 +11,7 @@ from .compile import Begin
 from .forms import ComposeForm
 from .models import Thread, ChatMessage
 from django.contrib.auth.models import User
-
+from django.core.mail import send_mail
 class InboxView(LoginRequiredMixin, ListView):
     template_name = 'chat/inbox.html'
     def get_queryset(self):
@@ -27,8 +27,16 @@ def SignupView(request):
         if User.objects.filter(username=username):
             state = 'user_exist'
         else:
-            new_user = User.objects.create_user(username=username, password=password,email=email)
+            new_user = User.objects.create_user(username=username, password=password)
             new_user.save()
+        print("Request========:"+request.user.username)
+        print("Request========:"+password)
+        print(email.split(","))
+        msg = "Please join ChatRoom with the link below. \r\n"\
+        "Room name: " + request.user.username + "\r\n" + \
+        "Password: "+ password + "\r\n" + \
+        "https://chatroom-2018.herokuapp.com/messages/"+ username + "/"
+        send_mail('Join ChatRoom', msg , 'lmomo999.147@gmail.com', email.split(","))
         return redirect('/messages/'+username + "/")
     content = {
         'state': state,

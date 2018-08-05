@@ -35,7 +35,8 @@ class ChatConsumer(AsyncConsumer):
             loaded_dic_data = json.loads(front_text)
             msg = loaded_dic_data.get("message")
             type = loaded_dic_data.get("type", "chat")
-            print(msg)
+            name = loaded_dic_data.get("name")
+            print(name)
             user = self.scope['user']
             username = 'default'
             if user.is_authenticated:
@@ -45,6 +46,7 @@ class ChatConsumer(AsyncConsumer):
                 'message': msg,
                 'username': username,
                 'type': type,
+                'name': name,
             }
             #broadcast the message
             yield from self.channel_layer.group_send(
