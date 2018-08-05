@@ -147,8 +147,8 @@ SITE_ID = 1
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'lmomo999.147@gmail.com'
-EMAIL_HOST_PASSWORD = '16368931lxl'
+EMAIL_HOST_USER = '2018.chatroom@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ['SENDGRID_PASSWORD']
 EMAIL_USE_TLS = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
