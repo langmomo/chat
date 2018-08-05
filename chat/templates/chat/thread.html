@@ -4,8 +4,10 @@
 <!--<h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>-->
 
 <div class="container-fluid" style= height:100vh;">
+    <label>Channel: {{ user.username}}</label>
     <div class="row h-100">
         <div class="col-3 sidebar p-3 text-center">
+
             <input id="nickName" name="nickName" placeholder="your nickname" style="cursor: pointer; display: block;border-radius: 7px"/>
             <form id='formData' method='POST'> {% csrf_token %}
                 <input type="hidden" id="myUsername" value="{{ user.username}}" />
