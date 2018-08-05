@@ -1,29 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
-<ul id='chat-items'>
-{% for chat in object.chatmessage_set.all %}
+<!--<h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>-->
 
-<li>{{ chat.message }} via {{ chat.user }}</li>
+<div class="container-fluid" style= height:100vh;">
+    <div class="row h-100">
+        <div class="col-3 sidebar p-3 text-center">
+            <input id="nickName" name="nickName" placeholder="your nickname" style="cursor: pointer; display: block;border-radius: 7px"/>
+            <form id='formData' method='POST'> {% csrf_token %}
+                <input type="hidden" id="myUsername" value="{{ user.username}}" />
+            {{form.as_p }}
+            <input type='submit' class='btn btn-primary'/>
+            </form>
+            <ul id='chat-items' style="list-style: none; text-indent: 0; padding: 0;">
+                {% for chat in object.chatmessage_set.all %}
 
-{% endfor %}
-</ul>
+                <li style="cursor: pointer; display: block; background-color: black; color: white; border-radius: 7px">
+                    {{ chat.message }} via {{ chat.user }}</li>
 
-<form id='formData' method='POST'> {% csrf_token %}
-    <input type="hidden" id="myUsername" value="{{ user.username}}" />
-{{form.as_p }}
-<input type='submit' class='btn btn-primary'/>
-</form>
+                {% endfor %}
+            </ul>
 
-<textarea rows="10" cols="35" id="inputdata"></textarea>
-<button id="" onclick="postFile()">Python</button>
 
-<button id="rundata" onclick="rundata()">RUN</button>
+        </div>
+        <div class="col-6 text-center text-white p-3">
+            <textarea rows="18" cols="45" class="text-white" id="inputdata" style="background-color: rgba(0,0,0,0.5); border: 3px solid #d2b48c; border-radius: 7px;"></textarea></br>
+            <button class="btn python-button mb-2 py-2 mx-auto"
+                style="display: block; cursor: pointer; color: black; background-color: lightblue; border-radius: 7px;"
+                onclick="postFile()">Run Python</button>
+            <button class="btn run-button mb-2 py-2 mx-auto"
+                style="display: block; cursor: pointer; color: black; background-color: lightblue; border-radius: 7px;"
+                id="rundata" onclick="rundata()">Run HTML</button>
+        </div>
+        <div class="col-3 sidebar p-3 text-center">
+            <iframe id="iframe1" class="text-white" width="300" height="425" style="background-color: lightgray; border: 3px solid #d2b48c; border-radius: 7px;">
+                {{items}}</iframe>
+        </div>
+    </div>
+</div>
 
-<iframe id="iframe1">{{items}}</iframe>
-<label>Label {{new}}</label>
-<input type="text" value="{{items}}"/>
+<!--<form id='formData' method='POST'> {% csrf_token %}-->
+    <!--<input type="hidden" id="myUsername" value="{{ user.username}}" />-->
+
+<!--{{form.as_p }}-->
+<!--<input type='submit' class='btn btn-primary'/>-->
+<!--</form>-->
+
+<!--<textarea rows="10" cols="35" id="inputdata"></textarea>-->
+<!--<button id="" onclick="postFile()">Python</button>-->
+
+<!--<button id="rundata" onclick="rundata()">RUN</button>-->
+
+<!--<iframe id="iframe1">{{items}}</iframe>-->
+<!--<label>Label {{new}}</label>-->
+<!--<input type="text" value="{{items}}"/>-->
 
 {% endblock %}
 
@@ -49,11 +79,10 @@ var socket= new WebSocket(endpoint)
 
 socket.onmessage = function(e){
     console.log("message",e)
-
     var chatMsgData = JSON.parse(e.data)
     console.log(chatMsgData.type)
     if(chatMsgData.type == 'chat'){
-        chatHolder.append("<li>" + chatMsgData.message + " via " + chatMsgData.username + "</li>")
+        chatHolder.append("<li>"+ chatMsgData.name + ":     " + chatMsgData.message + "</li>")
     }else{
         document.getElementById('inputdata').value = chatMsgData.message
     }
@@ -65,19 +94,21 @@ socket.onopen = function(e){
         file = false
         event.preventDefault()
         var msgText = inputData.val()
-        chatHolder.append("<li>" + msgText + " via " + me + "</li>")
+        var name = document.getElementById('nickName').value
+        console.log(name)
+        <!--chatHolder.append("<li>" + msgText + " via " + me + "</li>")-->
         var finalData = {
             'message': msgText,
-            'type': 'chat'
+            'type': 'chat',
+            'name': name,
         }
         socket.send(JSON.stringify(finalData))
-
         formData[0].reset()
     })
 
     inputArea.bind('input propertychange', function() {
         event.preventDefault()
-        chatHolder.append("<li>" + document.getElementById('inputdata').value + "</li>")
+        <!--chatHolder.append("<li>" + document.getElementById('inputdata').value + "</li>")-->
         var finalData = {
             'message': document.getElementById('inputdata').value,
             'type': 'file'
