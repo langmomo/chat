@@ -1,4 +1,4 @@
-Django==2.0.7
+Django==2.2.24
 pytz==2018.5
 redis==2.10.6
 channels==2.1.2
